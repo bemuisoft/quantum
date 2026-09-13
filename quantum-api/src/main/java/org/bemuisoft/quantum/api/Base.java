@@ -90,7 +90,7 @@ public interface Base {
 	 * @param a			- value a
 	 * @param b			- value b
 	 * @param margin	- the margin
-	 * @return	true if abs(a - b) &lt; margin, false otherwise
+	 * @return	{@code true} if abs(a - b) &lt; margin, {@code false} otherwise
 	 */
 	public default boolean isClose(double a, double b, double margin) {
 		return Math.abs(a - b) < margin;
@@ -200,9 +200,9 @@ public interface Base {
 	 * Returns an angle in radians mod 2π.
 	 * <p>
 	 * Default implementation returns the
-	 * angle in the range &lt;-π, +π]
+	 * angle in the range (-π, +π]
 	 * if the input value is in the range
-	 * &lt;-3π, +3π].
+	 * (-3π, +3π].
 	 * 
 	 * @param rad - the angle in radians
 	 * @return		the angle in radians mod 2π

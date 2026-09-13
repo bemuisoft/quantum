@@ -30,7 +30,7 @@ package org.bemuisoft.quantum.api;
  * if not overridden by the implementing class.
  * <p>
  * The pure state psi of a single qubit is usually described as
- * <pre>|psi> = (a, b)</pre>
+ * <pre>|psi⟩ = (a, b)</pre>
  * where a and b are two complex numbers, which can be expressed as<pre>
  * a = |a| * e^(i*alpha)
  * b = |b| * e^(i*beta) 
@@ -50,22 +50,22 @@ package org.bemuisoft.quantum.api;
  *  x = sin(theta)cos(phase)
  * </pre>where theta is defined to be in the range 0 through pi.
  * Some special states:<pre>
- * |0> is the state (1, 0) which has theta = 0	and x = 0, y = 0, z = +1
- * |1> is the state (0, 1) which has theta = pi	and x = 0, y = 0, z = -1
- * |+> is the state (sqrt(1/2),  sqrt(1/2)) which has theta = pi/2 and phase = 0	and x = +1, y = 0, z = 0
- * |-> is the state (sqrt(1/2), -sqrt(1/2)) which has theta = pi/2 and phase = pi	and x = -1, y = 0, z = 0
+ * |0⟩ is the state (1, 0) which has theta = 0	and x = 0, y = 0, z = +1
+ * |1⟩ is the state (0, 1) which has theta = pi	and x = 0, y = 0, z = -1
+ * |+⟩ is the state (sqrt(1/2),  sqrt(1/2)) which has theta = pi/2 and phase = 0	and x = +1, y = 0, z = 0
+ * |-⟩ is the state (sqrt(1/2), -sqrt(1/2)) which has theta = pi/2 and phase = pi	and x = -1, y = 0, z = 0
  * </pre>
- * The probability of measuring +1 along the Z axis, i.e. |0>, is cos²(theta/2) = (1+cos(theta))/2 = (1+z)/2<br/>
- * The probability of measuring -1 along the Z axis, i.e. |1>, is sin²(theta/2) = (1-cos(theta))/2 = (1-z)/2<br/>
+ * The probability of measuring +1 along the Z axis, i.e. |0⟩, is cos²(theta/2) = (1+cos(theta))/2 = (1+z)/2<br/>
+ * The probability of measuring -1 along the Z axis, i.e. |1⟩, is sin²(theta/2) = (1-cos(theta))/2 = (1-z)/2<br/>
  * <p>
  * When a qubit is entangled with another qubit, its state is not pure, but mixed.
  * This means it is a superposition of two possible (conditional) Bloch vectors,
- * one that will become the true state if the other qubit becomes |0> after measurement, and.
- * one that will become the true state if the other qubit becomes |1> after measurement.
+ * one that will become the true state if the other qubit becomes |0⟩ after measurement, and.
+ * one that will become the true state if the other qubit becomes |1⟩ after measurement.
  * Until such a measurement is done, a mixed Bloch vector can be assigned,
  * which is the weighted sum of the conditional Bloch vectors.
- * For example, if the probability that the other qubit is measured as |0> is 75%
- * (and thus 25% for |1>), the weighted sum is 0.75 times one + 0.25 times the other
+ * For example, if the probability that the other qubit is measured as |0⟩ is 75%
+ * (and thus 25% for |1⟩), the weighted sum is 0.75 times one + 0.25 times the other
  * conditional Bloch vector.
  * <p>
  * The methods {@code getX(i)}, {@code getY(i)} and {@code getZ(i)} may be used to
@@ -170,20 +170,20 @@ public interface IQubitAnalyzer extends IQubit {
 	}
 
 	/**
-	 * Returns the probability of measuring |0> along the Z axis.
+	 * Returns the probability of measuring |0⟩ along the Z axis.
 	 * This probability is defined as (1+z)/2.
 	 * 
-	 * @return	the probability of measuring |0>
+	 * @return	the probability of measuring |0⟩
 	 */
 	public default double getProbability0() {
 		return (1.0 + getZ()) / 2.0;
 	}
 
 	/**
-	 * Returns the probability of measuring |1> along the Z axis.
+	 * Returns the probability of measuring |1⟩ along the Z axis.
 	 * This probability is defined as (1-z)/2.
 	 * 
-	 * @return	the probability of measuring |1>
+	 * @return	the probability of measuring |1⟩
 	 */
 	public default double getProbability1() {
 		return (1.0 - getZ()) / 2.0;
@@ -209,6 +209,7 @@ public interface IQubitAnalyzer extends IQubit {
 	 * 			{@code false} otherwise
 	 */
 	public default boolean isMixed() {
+		// maybe implementer needs to allow for some margin
 		return (getMagnitude() < 1.0);
 	}
 
@@ -222,6 +223,7 @@ public interface IQubitAnalyzer extends IQubit {
 	 * 			{@code false} otherwise
 	 */
 	public default boolean isPure() {
+		// maybe implementer needs to allow for some margin
 		return (getMagnitude() == 1.0);
 	}
 

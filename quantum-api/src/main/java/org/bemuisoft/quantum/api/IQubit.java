@@ -21,7 +21,7 @@ package org.bemuisoft.quantum.api;
  * quantum computer, like a bit of a digital computer.
  * While classical bits are designed to be either 0 or 1,
  * a qubit can have values in between.
- * However, when measured it always becomes either |0> or |1>.
+ * However, when measured it always becomes either |0⟩ or |1⟩.
  * <p>
  * Both classical bits and qubits are controlled by gates.
  * Logical gates for digital bits and quantum gates for qubits.
@@ -53,24 +53,24 @@ package org.bemuisoft.quantum.api;
 public interface IQubit {
 
 	/**
-	 * Measures this qubit and return the outcome
-	 * as either 0 for |0> or 1 for |1>.
+	 * Measures this qubit and returns the outcome
+	 * as either 0 for |0⟩ or 1 for |1⟩.
 	 * 
 	 * @return this qubit's measurement value 0 or 1
 	 */
 	public int measure();
 	
 	/**
-	 * Resets this qubit to the basis state |0>
+	 * Resets this qubit to the basis state |0⟩
 	 * aka ground state of a phase qubit.
 	 * 
 	 * @return this qubit
 	 */
 	public IQubit reset();
 	
-	//---------------
-	// Unitary gates
-	//---------------
+	//-------------------
+	// Single-qubit gates
+	//-------------------
 	
 	/**
 	 * Applies the Hadamard gate to this qubit,
@@ -394,7 +394,7 @@ public interface IQubit {
 	 * @param phi - phi
 	 * @param lambda - lambda
 	 * @param ctrl - the control qubit
-	 * @return this qubit
+	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 */
 	public IQubit cu(double theta, double phi, double lambda, IQubit ctrl);
@@ -552,7 +552,7 @@ public interface IQubit {
 	 * @param phi - phi
 	 * @param lambda - lambda
 	 * @param ctrl - the control qubits
-	 * @return this qubit
+	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 * @throws UnsupportedOperationException when this gate is not supported
 	 */
