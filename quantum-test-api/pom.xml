@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>quantum-test-api</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>jar</packaging>
   <name>Quantum Test API</name>
   <description>A framework to test different quantum computer simulators.</description>
@@ -19,7 +19,7 @@
 	<dependency>
 		<groupId>org.bemuisoft.quantum</groupId>
 		<artifactId>quantum-api</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</dependency>
   </dependencies>
 

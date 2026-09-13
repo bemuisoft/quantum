@@ -31,6 +31,8 @@ import org.bemuisoft.quantum.api.IQubitFactory;
  * measurement outcomes in a single run.
  * 
  * @param <Q>	the type of qubit used in the experiment
+ * 
+ * @author Benno Muilwijk
  */
 public abstract class AbstractExperiment<Q extends IQubit> implements Base {
 
@@ -61,7 +63,7 @@ public abstract class AbstractExperiment<Q extends IQubit> implements Base {
 	}
 
 	/**
-	 * Resets all qubits to |0>.
+	 * Resets all qubits to |0⟩.
 	 */
 	private void init() {
 		for (int i = 0; i < q.length; i++) {
@@ -116,7 +118,7 @@ public abstract class AbstractExperiment<Q extends IQubit> implements Base {
 	 * Runs the experiment the specified number of times
 	 * and prints the results to {@code System.out}.
 	 * <p>
-	 * All qubits are reset to |0> before each run.
+	 * All qubits are reset to |0⟩ before each run.
 	 * 
 	 * @param times	number of times to run the experiment
 	 */
@@ -221,7 +223,7 @@ public abstract class AbstractExperiment<Q extends IQubit> implements Base {
 	 * <p>
 	 * The returned angles have a uniformly distributed cosine!
 	 * This is most useful as argument to RX or RY when
-	 * the qubit is known to be in state |0>  or |1>.
+	 * the qubit is known to be in state |0⟩  or |1⟩.
 	 * <p>
 	 * This example gives a qubit a random pure state
 	 * with even distribution over the Bloch sphere:<pre>
