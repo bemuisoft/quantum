@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 import org.bemuisoft.quantum.api.Axis;
 import org.bemuisoft.quantum.api.Base;
+import org.bemuisoft.quantum.api.IQuantumState;
 import org.bemuisoft.quantum.api.IQubit;
 import org.bemuisoft.quantum.api.IQubitAnalyzer;
 import org.bemuisoft.quantum.api.IQubitFactory;
@@ -72,8 +73,8 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	/**
 	 * Returns a {@link QubitTesterFactory} without verification qubits.
 	 * 
-	 * @param qtFactory		factory for qubits to be tested
-	 * @return	a qubit tester factory
+	 * @param qtFactory	- factory for qubits to be tested
+	 * @return			a qubit tester factory
 	 */
 	public static QubitTesterFactory factory(IQubitFactory<? extends IQubitAnalyzer> qtFactory) {
 		return new QubitTesterFactory(qtFactory);
@@ -84,9 +85,9 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	 * <p>
 	 * Qubits created by {@code qvFactory} must implement {@code setHiddenZ()}.
 	 * 
-	 * @param qtFactory		factory for qubits to be tested
-	 * @param qvFactory		factory for verification qubits
-	 * @return	a 	qubit tester factory
+	 * @param qtFactory	- factory for qubits to be tested
+	 * @param qvFactory	- factory for verification qubits
+	 * @return			a qubit tester factory
 	 */
 	public static QubitTesterFactory factory(
 			IQubitFactory<? extends IQubitAnalyzer> qtFactory,
@@ -97,8 +98,8 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	/**
 	 * Constructor.
 	 *
-	 * @param qt	the qubit to be tested
-	 * @param qv	the verification qubit, or null
+	 * @param qt	- the qubit to be tested
+	 * @param qv	- the verification qubit, or null
 	 */
 	public QubitTester(IQubitAnalyzer qt, IQubitAnalyzer qv) {
 		this.qt = qt;
@@ -198,9 +199,9 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	 * <p>
 	 * The return value can be used by a subclass to gather statistics.
 	 * 
-	 * @param property	name or label of the property to verify
-	 * @param actual	the actual value
-	 * @param expected	the expected value
+	 * @param property	- name or label of the property to verify
+	 * @param actual	- the actual value
+	 * @param expected	- the expected value
 	 * @return			0 if the actual value is close to the expected value, 1 otherwise
 	 */
 	protected int verify(String property, double actual, double expected) {
@@ -217,10 +218,10 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	 * <p>
 	 * The return value can be used by a subclass to gather statistics.
 	 * 
-	 * @param property	name or label of the property to verify
-	 * @param actual	the actual value
-	 * @param min		the minimum value
-	 * @param max		the maximum value
+	 * @param property	- name or label of the property to verify
+	 * @param actual	- the actual value
+	 * @param min		- the minimum value
+	 * @param max		- the maximum value
 	 * @return			0 if the actual value is in the expected range, 1 otherwise
 	 */
 	protected int verifyRange(String property, double actual, double min, double max) {
@@ -327,6 +328,15 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	}
 
 	@Override
+	public IQuantumState getSystemState() {
+		return qt.getSystemState();
+	}
+
+	//----------------
+	// IQubit methods
+	//----------------
+
+	@Override
 	public int measure() {
 		int outcome = qt.measure();
 		if (qv != null) {
@@ -341,10 +351,28 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	}
 
 	@Override
+	public int measureSign() {
+		int zt = qt.measureSign();
+		if (qv != null) {
+			qv.setHiddenZ(zt);
+			int zv = qv.measureSign();
+			if (zv != zt) {
+				qv.x();
+			}
+		}
+		verify();
+		return zt;
+	}
+
+	@Override
 	public QubitTester reset() {
 		process(q -> q.reset());
 		return this;
 	}
+
+	//--------------------
+	// Single-qubit gates
+	//--------------------
 
 	@Override
 	public QubitTester h() {
@@ -443,6 +471,16 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	}
 
 	@Override
+	public IQubit not() {
+		process(q -> q.not());
+		return this;
+	}
+
+	//----------------------------
+	// Two- and multi-qubit gates
+	//----------------------------
+
+	@Override
 	public QubitTester cx(IQubit ctrl) {
 		process((qt, qc) -> qt.cx(qc),  ctrl);
 		return this;
@@ -497,6 +535,22 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	}
 
 	@Override
+	public IQubit cnot(IQubit ctrl) {
+		process((qt, qc) -> qt.cnot(qc),  ctrl);
+		return this;
+	}
+
+	@Override
+	public IQubit swap(IQubit ctrl) {
+		process((qt, qc) -> qt.swap(qc),  ctrl);
+		return this;
+	}
+
+	//-------------------
+	// Three-qubit gates
+	//-------------------
+
+	@Override
 	public IQubit ccx(IQubit ctrl1, IQubit ctrl2) {
 		QubitTester ctl1 = (QubitTester) ctrl1;
 		QubitTester ctl2 = (QubitTester) ctrl2;
@@ -539,9 +593,22 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	}
 
 	@Override
-	public String toString() {
-		return getClass().getSimpleName() + ':' + qt.toString();
+	public IQubit toffoli(IQubit ctrl1, IQubit ctrl2) {
+		QubitTester ctl1 = (QubitTester) ctrl1;
+		QubitTester ctl2 = (QubitTester) ctrl2;
+		qt.toffoli(ctl1.qt, ctl2.qt);
+		if (qv != null && ctl1.qv != null && ctl2.qv != null) {
+			qv.toffoli(ctl1.qv, ctl2.qv);
+		}
+		this.verify();
+		ctl1.verify();
+		ctl2.verify();
+		return this;
 	}
+
+	//------------------------
+	// IQubitAnalyzer methods
+	//------------------------
 
 	@Override
 	public double getX() {
@@ -559,6 +626,51 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	}
 
 	@Override
+	public double getMagnitude() {
+		return qt.getMagnitude();
+	}
+
+	@Override
+	public double getPhase() {
+		return qt.getPhase();
+	}
+
+	@Override
+	public double getTheta() {
+		return qt.getTheta();
+	}
+
+	@Override
+	public double getProbability0() {
+		return qt.getProbability0();
+	}
+
+	@Override
+	public double getProbability1() {
+		return qt.getProbability1();
+	}
+
+	@Override
+	public double getPurity() {
+		return qt.getPurity();
+	}
+
+	@Override
+	public boolean isMixed() {
+		return qt.isMixed();
+	}
+
+	@Override
+	public boolean isPure() {
+		return qt.isPure();
+	}
+
+	@Override
+	public int components() {
+		return qt.components();
+	}
+
+	@Override
 	public double getX(int i) {
 		return qt.getX(i);
 	}
@@ -571,6 +683,35 @@ public class QubitTester implements IQubitAnalyzer, Base {
 	@Override
 	public double getZ(int i) {
 		return qt.getZ(i);
+	}
+
+	@Override
+	public double getHiddenX() {
+		return qt.getHiddenX();
+	}
+
+	@Override
+	public double getHiddenY() {
+		return qt.getHiddenY();
+	}
+
+	@Override
+	public double getHiddenZ() {
+		return qt.getHiddenZ();
+	}
+
+	@Override
+	public void setHiddenZ(double lambda) {
+		qt.setHiddenZ(lambda);
+	}
+
+	//----------------
+	// Object methods
+	//----------------
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ':' + qt.toString();
 	}
 
 }
