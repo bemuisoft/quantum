@@ -22,7 +22,7 @@ import org.bemuisoft.math.base.UnitVector;
  * A pure quantum state, or wave function,
  * is a commonly represented as a complex column vector
  * in Hilbert space.
- * This state vector is usually referred to as |Ψ⟩ or |psi⟩.
+ * This state vector is usually referred to as |Ψ⟩ or |Psi⟩.
  * <p>
  * The state vector has one dimension for each possible
  * combination of measurement outcomes.
@@ -32,7 +32,7 @@ import org.bemuisoft.math.base.UnitVector;
  * <p>
  * As every possible combination is included,
  * the sum of all probabilities must be equal to one.
- * This is known is the Born rule.
+ * This is known as the Born rule.
  * This implies that each state vector is also a unit vector.
  * 
  * @author Benno Muilwijk
@@ -70,8 +70,8 @@ public interface IQuantumState extends UnitVector {
 	 * Returns the magnitude of the complex amplitude
 	 * in the specified state dimension.
 	 * 
-	 * @param i		state dimension index
-	 * @return		the magnitude
+	 * @param i	- state dimension index
+	 * @return	the magnitude
 	 */
 	public double getMagnitude(int i);
 
@@ -79,8 +79,8 @@ public interface IQuantumState extends UnitVector {
 	 * Returns the phase of the complex amplitude
 	 * in the specified state dimension.
 	 * 
-	 * @param i		state dimension index
-	 * @return		the phase
+	 * @param i	- state dimension index
+	 * @return	the phase
 	 */
 	public double getPhase(int i);
 
@@ -97,14 +97,14 @@ public interface IQuantumState extends UnitVector {
 	 * <p>
 	 * The probability is the square of the absolute value of the magnitude.
 	 * 
-	 * @param i		state dimension index (identifies the outcomes)
-	 * @return		the probability of the specified outcomes
+	 * @param i	- state dimension index (identifies the outcomes)
+	 * @return	the probability of the specified outcomes
 	 */
 	public double getProbability(int i);
 
 	/**
-	 * Returns a boolean value which indicates if qubit labels
-	 * are assigned from left to right or from right to left.
+	 * Answers whether qubit labels are assigned
+	 * from left to right or from right to left.
 	 * <p>
 	 * Qubits are uniquely associated with a single bit in the
 	 * binary state dimension index. But some implementations associate
@@ -118,9 +118,26 @@ public interface IQuantumState extends UnitVector {
 	 * labels 'A', 'B', 'C', etc. either from left to right or
 	 * from right to left.
 	 * 
-	 * @return		{@code true} for right to left,
-	 * 				{@code false} for left to right
+	 * @return	{@code true} for right to left,
+	 * 			{@code false} for left to right
 	 */
 	public boolean isRightToLeft();
+
+	/**
+	 * Answers whether the phases of this quantum state
+	 * are strictly "by the book", that is, the same as
+	 * when calculated with QM textbook matrices.
+	 * <p>
+	 * If not, any global phase may have been applied.
+	 * In that case, only relative phases are meaningful.
+	 * This can be the case if some operation(s) are applied
+	 * with a non-standard global phase, for example, if
+	 * an RZ and P are applied in exactly the same way,
+	 * or if Pauli-Y is applied as RY(pi).
+	 * 
+	 * @return	{@code true} if strict phases are applied,
+	 * 			{@code false} otherwise
+	 */
+	public boolean hasStrictPhases();
 
 }

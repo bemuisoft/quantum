@@ -16,6 +16,8 @@ limitations under the License.
 
 package org.bemuisoft.quantum.api;
 
+import java.util.Objects;
+
 import org.bemuisoft.math.base.SpatialVector;
 import org.bemuisoft.math.base.UnitVector;
 
@@ -117,6 +119,24 @@ public class Axis extends SpatialVector implements UnitVector, Base {
 			theta = Math.acos(getZ());
 		}
 		return theta;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getPhi(), getTheta());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Axis other = (Axis) obj;
+		return Double.doubleToLongBits(getPhi()) == Double.doubleToLongBits(other.getPhi())
+				&& Double.doubleToLongBits(getTheta()) == Double.doubleToLongBits(other.getTheta());
 	}
 
 }

@@ -42,7 +42,7 @@ public class QubitFactory<Q> implements IQubitFactory<Q> {
 	 * Factory constructor for qubit implementations that do
 	 * not require a reference to a shared quantum state.
 	 * 
-	 * @param implClass	the class Q that implements the qubit
+	 * @param implClass	- the class Q that implements the qubit
 	 */
 	public QubitFactory(Class<Q> implClass) {
 		this.implClass = implClass;
@@ -52,8 +52,8 @@ public class QubitFactory<Q> implements IQubitFactory<Q> {
 	 * Factory constructor for qubit implementations that
 	 * require a reference to a shared quantum state.
 	 * 
-	 * @param qs		a quantum state object
-	 * @param implClass	the class Q that implements the qubit
+	 * @param qs		- a quantum state object
+	 * @param implClass	- the class Q that implements the qubit
 	 * @see IQuantumState
 	 */
 	public QubitFactory(IQuantumState qs, Class<Q> implClass) {
@@ -72,7 +72,7 @@ public class QubitFactory<Q> implements IQubitFactory<Q> {
 	 *		 was passed to this factory.</li>
 	 * </ul>
 	 * 
-	 * @param label		a label that identifies the qubit
+	 * @param label		- a label that identifies the qubit
 	 * @return			a new qubit instance of type Q
 	 */
 	@Override

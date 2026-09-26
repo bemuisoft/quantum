@@ -37,8 +37,8 @@ public interface IQubitFactory<Q> {
 	 * Class Q should typically implement either
 	 * {@link IQubit} or {@link IQubitAnalyzer}.
 	 * 
-	 * @param label		a label that identifies the qubit
-	 * @return			a new qubit instance of type Q
+	 * @param label	- a label that identifies the qubit
+	 * @return		a new qubit instance of type Q
 	 */
 	public Q newQubit(String label);
 

@@ -59,7 +59,17 @@ public interface IQubit {
 	 * @return this qubit's measurement value 0 or 1
 	 */
 	public int measure();
-	
+
+	/**
+	 * Measures this qubit and returns the outcome
+	 * as either 1 for |0⟩ or -1 for |1⟩.
+	 * 
+	 * @return this qubit's measurement value +1 or -1
+	 */
+	public default int measureSign() {
+		return (measure() != 1) ? +1 : -1;
+	}
+
 	/**
 	 * Resets this qubit to the basis state |0⟩
 	 * aka ground state of a phase qubit.
@@ -67,11 +77,11 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit reset();
-	
-	//-------------------
+
+	//--------------------
 	// Single-qubit gates
-	//-------------------
-	
+	//--------------------
+
 	/**
 	 * Applies the Hadamard gate to this qubit,
 	 * which essentially swaps x and z.
@@ -85,7 +95,7 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit h();
-	
+
 	/**
 	 * Applies the Pauli X gate to this qubit,
 	 * which essentially negates z and y.
@@ -99,7 +109,7 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit x();
-	
+
 	/**
 	 * Applies the Pauli Y gate to this qubit,
 	 * which essentially negates z and x.
@@ -111,7 +121,7 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit y();
-	
+
 	/**
 	 * Applies the Pauli Z gate to this qubit,
 	 * which essentially negates x and y.
@@ -122,7 +132,7 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit z();
-	
+
 	/**
 	 * Applies the S gate to this qubit,
 	 * which is the square root of the Pauli Z gate.
@@ -134,7 +144,7 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit s();
-	
+
 	/**
 	 * Applies the S dagger gate to this qubit,
 	 * which is the negative square root of
@@ -147,7 +157,7 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit sdg();
-	
+
 	/**
 	 * Applies the T gate to this qubit,
 	 * which is essentially a phase shift of pi/4.
@@ -158,7 +168,7 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit t();
-	
+
 	/**
 	 * Applies the T dagger gate to this qubit,
 	 * which is essentially a phase shift of -pi/4.
@@ -169,65 +179,71 @@ public interface IQubit {
 	 * @return this qubit
 	 */
 	public IQubit tdg();
-	
+
 	/**
 	 * Applies the universal phase shift gate to this qubit,
 	 * which effectively rotates this qubit about the Z axis
 	 * by the specified angle.
 	 * The effect is a clean phase shift without global phase change.
 	 * 
-	 * @param radians - the angle to rotate
+	 * @param radians	- the angle to rotate
 	 * @return this qubit
 	 */
 	public IQubit p(double radians);
-	
+
 	/**
 	 * Applies the SX gate to this qubit,
 	 * which is the square root of the Pauli X gate.
 	 * <p>
+	 * This is equivalent to HSH<br/>
+	 * or in code: {@code h().s().h()}
+	 * <p>
 	 * Except for a global phase change,
-	 * this is equivalent to RX(pi/2)<br/>
+	 * it is also equivalent to RX(pi/2)<br/>
 	 * or in code: {@code rx(Math.PI/2)}
 	 * 
 	 * @return this qubit
 	 */
 	public IQubit sx();
-	
+
 	/**
 	 * Applies the SX dagger gate to this qubit,
 	 * which is the negative square root of
 	 * the Pauli X gate.
 	 * <p>
+	 * This is equivalent to HSdgH<br/>
+	 * or in code: {@code h().sdg().h()}
+	 * <p>
 	 * Except for a global phase change,
-	 * this is equivalent to RX(-pi/2)<br/>
+	 * it is also equivalent to RX(-pi/2)<br/>
 	 * or in code: {@code rx(-Math.PI/2)}
 	 * 
 	 * @return this qubit
 	 */
 	public IQubit sxdg();
-	
+
 	/**
 	 * Rotates this qubit about the X axis
 	 * by the specified angle.
 	 * <p>
 	 * It is equivalent to {@code r(Axis.X, radians)}
 	 * 
-	 * @param radians - the angle to rotate
+	 * @param radians	- the angle to rotate
 	 * @return this qubit
 	 */
 	public IQubit rx(double radians);
-	
+
 	/**
 	 * Rotates this qubit about the Y axis
 	 * by the specified angle.
 	 * <p>
 	 * It is equivalent to {@code r(Axis.Y, radians)}
 	 * 
-	 * @param radians - the angle to rotate
+	 * @param radians	- the angle to rotate
 	 * @return this qubit
 	 */
 	public IQubit ry(double radians);
-	
+
 	/**
 	 * Rotates this qubit about the Z axis
 	 * by the specified angle.
@@ -237,11 +253,11 @@ public interface IQubit {
 	 * <p>
 	 * It is equivalent to {@code r(Axis.Z, radians)}
 	 * 
-	 * @param radians - the angle to rotate
+	 * @param radians	- the angle to rotate
 	 * @return this qubit
 	 */
 	public IQubit rz(double radians);
-	
+
 	/**
 	 * Rotates this qubit about the specified axis
 	 * by the specified angle.
@@ -251,12 +267,12 @@ public interface IQubit {
 	 * <li>{@code r(Axis.X, lambda)} is equivalent to {@code rx(lambda)}
 	 * </ul>
 	 * 
-	 * @param axis - the rotation axis
-	 * @param radians - the angle to rotate
+	 * @param axis		- the rotation axis
+	 * @param radians	- the angle to rotate
 	 * @return this qubit
 	 */
 	public IQubit r(Axis axis, double radians);
-	
+
 	/**
 	 * Applies the universal gate U to this qubit.
 	 * <p>
@@ -272,13 +288,13 @@ public interface IQubit {
 	 * without changing its phase
 	 * </ul>
 	 * 
-	 * @param theta - theta
-	 * @param phi - phi
-	 * @param lambda - lambda
+	 * @param theta		- theta
+	 * @param phi		- phi
+	 * @param lambda	- lambda
 	 * @return this qubit
 	 */
 	public IQubit u(double theta, double phi, double lambda);
-	
+
 	/**
 	 * Applies the NOT gate aka bit flip to this qubit.
 	 * <p>
@@ -290,7 +306,7 @@ public interface IQubit {
 	public default IQubit not() {
 		return x();
 	}
-	
+
 	//-----------------
 	// Two-qubit gates
 	//-----------------
@@ -299,22 +315,37 @@ public interface IQubit {
 	 * Applies the controlled X (aka CNOT) gate to this qubit,
 	 * using the input qubit as control.
 	 * 
-	 * @param ctrl - the control qubit
+	 * @param ctrl	- the control qubit
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 */
 	public IQubit cx(IQubit ctrl);
-	
+
 	/**
 	 * Applies the controlled Z gate to this qubit,
 	 * using the input qubit as control.
 	 * 
-	 * @param ctrl - the control qubit
+	 * @param ctrl	- the control qubit
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 */
 	public IQubit cz(IQubit ctrl);
-	
+
+	/**
+	 * Applies a controlled phase shift.
+	 * It is similar to {@code cr(Axis.Z, lambda, ctrl)}
+	 * but without extra phase shift on the control qubit.
+	 * <p>
+	 * This operation is symmetric, i.e.
+	 * {@code this.cp(lambda, ctrl)} is equivalent to {@code ctrl.cp(lambda, this)}.
+	 * 
+	 * @param radians	- the controlled angle to rotate
+	 * @param ctrl		- the control qubit
+	 * @return this qubit (the target)
+	 * @throws ClassCastException when {@code ctrl} is not compatible
+	 */
+	public IQubit cp(double radians, IQubit ctrl);
+
 	/**
 	 * Applies a controlled rotation of pi about the specified axis to this qubit.
 	 * Some examples:<ul>
@@ -330,28 +361,13 @@ public interface IQubit {
 	 * Note that {@code c(anAxis, ctrl)} is not exactly the same as {@code cr(anAxis, Math.PI, ctrl)}.
 	 * The difference is that {@code cr} applies an extra phase shift of -lambda/2 = -pi/2 to the control qubit.
 	 * 
-	 * @param axis - the rotation axis
-	 * @param ctrl - the control qubit
+	 * @param axis	- the rotation axis
+	 * @param ctrl	- the control qubit
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 */
 	public IQubit c(Axis axis, IQubit ctrl);
-	
-	/**
-	 * Applies a controlled phase shift.
-	 * It is similar to {@code cr(Axis.Z, lambda, ctrl)}
-	 * but without extra phase shift on the control qubit.
-	 * <p>
-	 * This operation is symmetric, i.e.
-	 * {@code this.cp(lambda, ctrl)} is equivalent to {@code ctrl.cp(lambda, this)}.
-	 * 
-	 * @param radians - the controlled angle to rotate
-	 * @param ctrl - the control qubit
-	 * @return this qubit (the target)
-	 * @throws ClassCastException when {@code ctrl} is not compatible
-	 */
-	public IQubit cp(double radians, IQubit ctrl);
-	
+
 	/**
 	 * Applies a controlled rotation to this qubit.
 	 * Some examples:<ul>
@@ -369,18 +385,18 @@ public interface IQubit {
 	 * Y and CY versus RY(pi) and CRY(pi), as well as
 	 * Z and CZ versus RZ(pi) and CRZ(pi).
 	 * 
-	 * @param axis - the rotation axis
-	 * @param radians - the controlled angle to rotate
-	 * @param ctrl - the control qubit
+	 * @param axis		- the rotation axis
+	 * @param radians	- the controlled angle to rotate
+	 * @param ctrl		- the control qubit
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 */
 	public IQubit cr(Axis axis, double radians, IQubit ctrl);
-	
+
 	/**
 	 * Applies a controlled universal gate U to this qubit.
 	 * <p>
-	 * This is equivalent to a controlled P(phi) o RY(theta) o P(lambda).
+	 * This is equivalent to a controlled (P(phi) o RY(theta) o P(lambda)).
 	 * <p>
 	 * Some examples:<ul>
 	 * <li>{@code cu(theta, 0, 0, ctrl)} performs a controlled RY(theta)
@@ -390,15 +406,15 @@ public interface IQubit {
 	 * </ul>
 	 * The CU operation usually performs better than the CR operation.
 	 * 
-	 * @param theta - theta
-	 * @param phi - phi
-	 * @param lambda - lambda
-	 * @param ctrl - the control qubit
+	 * @param theta		- theta
+	 * @param phi		- phi
+	 * @param lambda	- lambda
+	 * @param ctrl		- the control qubit
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 */
 	public IQubit cu(double theta, double phi, double lambda, IQubit ctrl);
-	
+
 	/**
 	 * Applies the CNOT gate to this qubit,
 	 * using the input qubit as control.
@@ -406,18 +422,40 @@ public interface IQubit {
 	 * This is equivalent to the controlled X gate<br/>
 	 * or in code: {@code cx(ctrl)}
 	 * 
-	 * @param ctrl - the control qubit
+	 * @param ctrl	- the control qubit
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 */
 	public default IQubit cnot(IQubit ctrl) {
 		return cx(ctrl);
 	}
-	
+
+	/**
+	 * Applies the SWAP gate to this and another qubit.
+	 * This swaps the state of both qubits.
+	 * <p>
+	 * This is equivalent to:
+	 * <pre>
+	 * this.cx(ctrl);
+	 * ctrl.cx(this);
+	 * this.cx(ctrl);
+	 * </pre>
+	 * 
+	 * @param ctrl	- the other qubit
+	 * @return this qubit (with swapped state)
+	 * @throws ClassCastException when {@code ctrl} is not compatible
+	 */
+	public default IQubit swap(IQubit ctrl) {
+		this.cx(ctrl);
+		ctrl.cx(this);
+		this.cx(ctrl);
+		return this;
+	}
+
 	//-------------------
 	// Three-qubit gates
 	//-------------------
-	
+
 	/**
 	 * Applies the controlled controlled X gate to this qubit,
 	 * using the input qubits as control.
@@ -425,8 +463,8 @@ public interface IQubit {
 	 * It is equivalent to {@code c(Axis.X, ctrl1, ctrl2)},
 	 * but it might perform better, depending on the implementation.
 	 * 
-	 * @param ctrl1 - control qubit 1
-	 * @param ctrl2 - control qubit 2
+	 * @param ctrl1	- control qubit 1
+	 * @param ctrl2	- control qubit 2
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when either control qubit is not compatible
 	 */
@@ -436,7 +474,7 @@ public interface IQubit {
 		h();
 		return this;
 	}
-	
+
 	/**
 	 * Applies the controlled controlled Z gate to this qubit,
 	 * using the input qubits as control.
@@ -444,15 +482,15 @@ public interface IQubit {
 	 * It is equivalent to {@code c(Axis.Z, ctrl1, ctrl2)},
 	 * but it might perform better, depending on the implementation.
 	 * 
-	 * @param ctrl1 - control qubit 1
-	 * @param ctrl2 - control qubit 2
+	 * @param ctrl1	- control qubit 1
+	 * @param ctrl2	- control qubit 2
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when either control qubit is not compatible
 	 */
 	public default IQubit ccz(IQubit ctrl1, IQubit ctrl2) {
 		return ccp(Math.PI, ctrl1, ctrl2);
 	}
-	
+
 	/**
 	 * Applies a controlled controlled phase shift.
 	 * <p>
@@ -463,9 +501,9 @@ public interface IQubit {
 	 * {@code this.ccp(lambda, ctrl1, ctrl2)} is equivalent to
 	 * {@code ctrl1.cp(lambda, this, ctrl2)} and {@code ctrl2.cp(lambda, ctrl1, this)}.
 	 * 
-	 * @param radians - the controlled angle to rotate
-	 * @param ctrl1 - control qubit 1
-	 * @param ctrl2 - control qubit 2
+	 * @param radians	- the controlled angle to rotate
+	 * @param ctrl1		- control qubit 1
+	 * @param ctrl2		- control qubit 2
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when either control qubit is not compatible
 	 */
@@ -478,7 +516,7 @@ public interface IQubit {
 		ctrl1.cp(alpha, ctrl2);
 		return this;
 	}
-	
+
 	/**
 	 * Applies the Toffoli (aka CCNOT) gate to this qubit,
 	 * using the input qubits as control.
@@ -486,19 +524,19 @@ public interface IQubit {
 	 * This is equivalent to the controlled controlled X gate<br/>
 	 * or in code: {@code ccx(ctrl1, ctrl2)}
 	 * 
-	 * @param ctrl1 - control qubit 1
-	 * @param ctrl2 - control qubit 2
+	 * @param ctrl1	- control qubit 1
+	 * @param ctrl2	- control qubit 2
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when any control qubit is not compatible
 	 */
 	public default IQubit toffoli(IQubit ctrl1, IQubit ctrl2) {
 		return ccx(ctrl1, ctrl2);
 	}
-	
+
 	//-------------------
 	// Multi-qubit gates
 	//-------------------
-	
+
 	/**
 	 * Applies a multi-controlled rotation of pi about the specified axis to this qubit.
 	 * Some examples:<ul>
@@ -506,8 +544,8 @@ public interface IQubit {
 	 * <li>{@code c(Axis.Z, ctrl1, ctrl2)} performs a CCZ, equivalent to {@code ccz(ctrl1, ctrl2)}
 	 * </ul>
 	 * 
-	 * @param axis - the rotation axis
-	 * @param ctrl - the control qubits
+	 * @param axis	- the rotation axis
+	 * @param ctrl	- the control qubits
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when any control qubit is not compatible
 	 * @throws UnsupportedOperationException when this gate is not supported
@@ -515,7 +553,7 @@ public interface IQubit {
 	public default IQubit c(Axis axis, IQubit... ctrl) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Applies a multi-controlled rotation to this qubit.
 	 * Some examples:<ul>
@@ -525,9 +563,9 @@ public interface IQubit {
 	 * </ul>
 	 * Note that the same differences apply as for {@code cr()} with a single control qubit.
 	 * 
-	 * @param axis - the rotation axis
-	 * @param radians - the controlled angle to rotate
-	 * @param ctrl - the control qubits
+	 * @param axis		- the rotation axis
+	 * @param radians	- the controlled angle to rotate
+	 * @param ctrl		- the control qubits
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when any control qubit is not compatible
 	 * @throws UnsupportedOperationException when this gate is not supported
@@ -536,7 +574,7 @@ public interface IQubit {
 	public default IQubit cr(Axis axis, double radians, IQubit... ctrl) {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * Applies a multi-controlled universal gate U to this qubit.
 	 * <p>
@@ -548,10 +586,10 @@ public interface IQubit {
 	 * </ul>
 	 * The CU operation usually performs better than the CR operation.
 	 * 
-	 * @param theta - theta
-	 * @param phi - phi
-	 * @param lambda - lambda
-	 * @param ctrl - the control qubits
+	 * @param theta		- theta
+	 * @param phi		- phi
+	 * @param lambda	- lambda
+	 * @param ctrl		- the control qubits
 	 * @return this qubit (the target)
 	 * @throws ClassCastException when {@code ctrl} is not compatible
 	 * @throws UnsupportedOperationException when this gate is not supported

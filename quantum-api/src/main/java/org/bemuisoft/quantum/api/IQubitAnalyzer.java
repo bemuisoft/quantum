@@ -258,10 +258,10 @@ public interface IQubitAnalyzer extends IQubit {
 	 * but if the components represent conditional Bloch
 	 * vectors, the returned value is the weighted x value.
 	 * 
-	 * @param i		the Bloch vector component index
-	 * @return		the Bloch vector component's x value
-	 * @throws		UnsupportedOperationException
-	 * 				if this operation is not supported
+	 * @param i	- the Bloch vector component index
+	 * @return	the Bloch vector component's x value
+	 * @throws	UnsupportedOperationException
+	 * 			if this operation is not supported
 	 * @see #components()
 	 */
 	public default double getX(int i) {
@@ -279,10 +279,10 @@ public interface IQubitAnalyzer extends IQubit {
 	 * but if the components represent conditional Bloch
 	 * vectors, the returned value is the weighted y value.
 	 * 
-	 * @param i		the Bloch vector component index
-	 * @return		the Bloch vector component's y value
-	 * @throws		UnsupportedOperationException
-	 * 				if this operation is not supported
+	 * @param i	- the Bloch vector component index
+	 * @return	the Bloch vector component's y value
+	 * @throws	UnsupportedOperationException
+	 * 			if this operation is not supported
 	 * @see #components()
 	 */
 	public default double getY(int i) {
@@ -300,10 +300,10 @@ public interface IQubitAnalyzer extends IQubit {
 	 * but if the components represent conditional Bloch
 	 * vectors, the returned value is the weighted z value.
 	 * 
-	 * @param i		the Bloch vector component index
-	 * @return		the Bloch vector component's z value
-	 * @throws		UnsupportedOperationException
-	 * 				if this operation is not supported
+	 * @param i	- the Bloch vector component index
+	 * @return	the Bloch vector component's z value
+	 * @throws	UnsupportedOperationException
+	 * 			if this operation is not supported
 	 * @see #components()
 	 */
 	public default double getZ(int i) {
@@ -366,7 +366,7 @@ public interface IQubitAnalyzer extends IQubit {
 	 * of a measurement along the Z axis, in combination
 	 * with the z value of this qubit's Bloch vector.
 	 * 
-	 * @param lambda	the hidden vector's z value
+	 * @param lambda	- the hidden vector's z value
 	 * @throws	UnsupportedOperationException
 	 * 			if this operation is not supported
 	 */
