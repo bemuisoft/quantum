@@ -97,7 +97,7 @@ public class ThreeQubitTest<Q extends IQubit> extends AbstractQubitTest<Q> {
 
 	/**
 	 * Asserts that GHZ state |GHZ⟩ gives the expected correlations
-	 * for a XXX measurement.
+	 * for an XXX measurement.
 	 * 
 	 * @see <a href="https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state">GHZ state</a>
 	 */
@@ -114,7 +114,7 @@ public class ThreeQubitTest<Q extends IQubit> extends AbstractQubitTest<Q> {
 
 	/**
 	 * Asserts that GHZ state |GHZ⟩ gives the expected correlations
-	 * for a XYY measurement.
+	 * for an XYY measurement.
 	 * 
 	 * @see <a href="https://en.wikipedia.org/wiki/Greenberger%E2%80%93Horne%E2%80%93Zeilinger_state">GHZ state</a>
 	 */
@@ -138,7 +138,7 @@ public class ThreeQubitTest<Q extends IQubit> extends AbstractQubitTest<Q> {
 	@RepeatedTest(10)
 	public final void testYXY() {
 		int corr;	// correlation, +1 = even, -1 = odd
-		// test - an YXY measurement on |GHZ⟩ should give odd parity
+		// test - a YXY measurement on |GHZ⟩ should give odd parity
 		qa.h();
 		qb.cnot(qa);
 		qc.cnot(qb);
@@ -155,7 +155,7 @@ public class ThreeQubitTest<Q extends IQubit> extends AbstractQubitTest<Q> {
 	@RepeatedTest(10)
 	public final void testYYX() {
 		int corr;	// correlation, +1 = even, -1 = odd
-		// test - an YYX measurement on |GHZ⟩ should give odd parity
+		// test - a YYX measurement on |GHZ⟩ should give odd parity
 		qa.h();
 		qb.cnot(qa);
 		qc.cnot(qb);
