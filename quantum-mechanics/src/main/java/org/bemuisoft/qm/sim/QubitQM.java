@@ -68,21 +68,6 @@ public class QubitQM extends SimpleBlochVector implements IQubitAnalyzer {
 		return new QubitFactory<>(qs, QubitQM.class);
 	}
 
-	private static char label(String longLabel) {
-		// return a capital as short label based on last char of longLabel
-		char ch = longLabel.charAt(longLabel.length() - 1);
-		if (ch < 'A') {
-			// assume '0' based
-			return (char) (ch - '0' + 'A');
-		}
-		if (ch < 'a') {
-			// assume 'A' based
-			return ch;
-		}
-		// assume 'a' based
-		return (char) (ch - 'a' + 'A');
-	}
-
 	/**
 	 * Constructs a qubit with a shared {@link QuantumSystem}.
 	 * <p>
@@ -121,13 +106,13 @@ public class QubitQM extends SimpleBlochVector implements IQubitAnalyzer {
 	 * starting at either 0 or A or a.
 	 * 
 	 * @param qs		the quantum system to share
-	 * @param longLabel	a long label with identifying last character
+	 * @param label		a long label with identifying last character
 	 * @see				IQuantumState#isRightToLeft()
 	 */
-	public QubitQM(PureQuantumSystem qs, String longLabel) {
-		super(longLabel);
+	public QubitQM(PureQuantumSystem qs, String label) {
+		super(label);
 		this.qs = qs;
-		this.qIndex = qs.qubitIndex(label(longLabel));
+		this.qIndex = qs.qubitIndex(qs.shortLabel(label));
 	}
 
 	private void synchState() {
@@ -276,7 +261,7 @@ public class QubitQM extends SimpleBlochVector implements IQubitAnalyzer {
 			lambda = randomCos();
 		}
 		int outcome = (getZ() + lambda < 0.0) ? 1 : 0;
-		debug("measured |" + outcome + '>');
+		debug("measured |" + outcome + '⟩');
 		getSystemState().setMeasured(outcome, qIndex);
 		return outcome;
 	}

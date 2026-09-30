@@ -82,12 +82,12 @@ public class MinimalQubitQM extends AbstractQubit {
 	 * range starting at either 0 or A or a.
 	 * 
 	 * @param qs		the quantum system to share
-	 * @param longLabel	a long label with identifying last character
+	 * @param label		a long label with identifying last character
 	 * @see				IQuantumState#isRightToLeft()
 	 */
-	public MinimalQubitQM(PureQuantumSystem qs, String longLabel) {
+	public MinimalQubitQM(PureQuantumSystem qs, String label) {
 		this.qs = qs;
-		this.qIndex = qs.qubitIndex(label(longLabel));
+		this.qIndex = qs.qubitIndex(qs.shortLabel(label));
 	}
 
 	@Override
