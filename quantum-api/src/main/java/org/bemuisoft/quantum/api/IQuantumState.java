@@ -103,6 +103,23 @@ public interface IQuantumState extends UnitVector {
 	public double getProbability(int i);
 
 	/**
+	 * Answers whether the phases of this quantum state
+	 * are strictly "by the book", that is, the same as
+	 * when calculated with QM textbook matrices.
+	 * <p>
+	 * If not, any global phase may have been applied.
+	 * In that case, only relative phases are meaningful.
+	 * This can be the case if some operation(s) are applied
+	 * with a non-standard global phase, for example, if
+	 * an RZ and P are applied in exactly the same way,
+	 * or if Pauli-Y is applied as RY(pi).
+	 * 
+	 * @return	{@code true} if strict phases are applied,
+	 * 			{@code false} otherwise
+	 */
+	public boolean hasStrictPhases();
+
+	/**
 	 * Answers whether qubit labels are assigned
 	 * from left to right or from right to left.
 	 * <p>
@@ -124,20 +141,27 @@ public interface IQuantumState extends UnitVector {
 	public boolean isRightToLeft();
 
 	/**
-	 * Answers whether the phases of this quantum state
-	 * are strictly "by the book", that is, the same as
-	 * when calculated with QM textbook matrices.
-	 * <p>
-	 * If not, any global phase may have been applied.
-	 * In that case, only relative phases are meaningful.
-	 * This can be the case if some operation(s) are applied
-	 * with a non-standard global phase, for example, if
-	 * an RZ and P are applied in exactly the same way,
-	 * or if Pauli-Y is applied as RY(pi).
+	 * Returns a capital as short label which is derived
+	 * from the last character of a given long label.
 	 * 
-	 * @return	{@code true} if strict phases are applied,
-	 * 			{@code false} otherwise
+	 * @param longLabel - the long label
+	 * @return the short label
+	 * @see #isRightToLeft()
+	 * @see QubitFactory#newQubit(String)
 	 */
-	public boolean hasStrictPhases();
+	public default char shortLabel(String longLabel) {
+		// return a capital as short label based on last char of longLabel
+		char ch = longLabel.charAt(longLabel.length() - 1);
+		if (ch < 'A') {
+			// assume '0' based
+			return (char) (ch - '0' + 'A');
+		}
+		if (ch < 'a') {
+			// assume 'A' based
+			return ch;
+		}
+		// assume 'a' based
+		return (char) (ch - 'a' + 'A');
+	}
 
 }

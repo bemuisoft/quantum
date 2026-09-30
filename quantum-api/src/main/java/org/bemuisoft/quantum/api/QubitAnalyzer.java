@@ -16,8 +16,6 @@ limitations under the License.
 
 package org.bemuisoft.quantum.api;
 
-import org.bemuisoft.math.base.SpatialVector;
-
 /**
  * Provides a wrapper for {@link IQubit} implementations
  * that do not implement {@link IQubitAnalyzer} themselves,
@@ -28,15 +26,10 @@ import org.bemuisoft.math.base.SpatialVector;
  * 
  * @author Benno Muilwijk
  */
-public class QubitAnalyzer extends SpatialVector implements IQubitAnalyzer, Base {
+public class QubitAnalyzer extends AbstractQubitAnalyzer {
 
-	private IQuantumState qs;
 	private IQubit q;
-	private String label;
-	private int qMask;
-	private int stateId = -1;
 	private StateIdentifier state;
-	private double[][] components;
 
 	/**
 	 * A factory for qubit analyzers.
@@ -79,138 +72,19 @@ public class QubitAnalyzer extends SpatialVector implements IQubitAnalyzer, Base
 
 	// private constructor
 	private QubitAnalyzer(IQuantumState qs, IQubit q, String label, StateIdentifier state) {
-		this.qs = qs;
+		super(qs, q.getClass().getSimpleName() + ' ' + label);
 		this.q = q;
-		this.label = q.getClass().getSimpleName() + ' ' + label;
-		this.qMask = getMask(label);
 		this.state = state;
-		this.components = new double[qs.size()/2][3];
 	}
 
-	private int getMask(String label) {
-		int i = AbstractQubit.label(label) - 'A';
-		return (qs.isRightToLeft()) ? 1 << i : qs.size() >> (i+1);
-	}
-
-	private void addComponent(int i0, int i1, int k) {
-		// extract the Bloch vector component
-		double p0 = qs.getProbability(i0);
-		double p1 = qs.getProbability(i1);
-		double p = p0 + p1;							// probability == weighted length
-		double pcos = p0 - p1;						// p*cos(theta) == z
-		double psin = Math.sqrt(p*p - pcos*pcos);	// p*sin(theta) == sqrt(x² + y²) == sqrt(p² - z²)
-		double phase = qs.getPhase(i1) - qs.getPhase(i0);
-		
-		double x = psin * Math.cos(phase);
-		double y = psin * Math.sin(phase);
-		double z = pcos;
-		
-		super.x += x;
-		super.y += y;
-		super.z += z;
-		
-		components[k][0] = x;
-		components[k][1] = y;
-		components[k][2] = z;
-	}
-
-	private void setXYZ(double x, double y, double z) {
-		super.x = x;
-		super.y = y;
-		super.z = z;
-	}
-
-	private void synchState() {
-		// refresh this qubit's Bloch vector and its components
-		// if the system state has changed
-		if (stateId != state.id) synchronized(qs) {
-			setXYZ(0.0, 0.0, 0.0);
-			int mask = qMask;
-			int k = 0;
-			for (int i = 0; i < qs.size(); i++) {
-				if ((i & mask) == 0) {
-					int j = i | mask;
-					addComponent(i, j, k++);
-				}
-			}
-			setXYZ(roundCos(x), roundCos(y), roundCos(z));
-			stateId = state.id;
-		}
+	@Override
+	protected int stateIdentifier() {
+		return state.id;
 	}
 
 	private QubitAnalyzer thisUpdated() {
 		state.id++;
 		return this;
-	}
-
-	//------------------------
-	// IQubitAnalyzer methods
-	//------------------------
-
-	@Override
-	public String getLabel() {
-		return label;
-	}
-
-	@Override
-	public IQuantumState getSystemState() {
-		return qs;
-	}
-
-	@Override
-	public double getX() {
-		synchState();
-		return super.x;
-	}
-
-	@Override
-	public double getY() {
-		synchState();
-		return super.y;
-	}
-
-	@Override
-	public double getZ() {
-		synchState();
-		return super.z;
-	}
-
-	@Override
-	public double getMagnitude() {
-		return roundCos(IQubitAnalyzer.super.getMagnitude());
-	}
-
-	@Override
-	public boolean isMixed() {
-		return !isPure();
-	}
-
-	@Override
-	public boolean isPure() {
-		return (getMagnitude() > 1.0 - 1e-12);
-	}
-
-	@Override
-	public int components() {
-		return components.length;
-	}
-
-	@Override
-	public double getX(int i) {
-		synchState();
-		return components[i][0];
-	}
-
-	@Override
-	public double getY(int i) {
-		synchState();
-		return components[i][1];
-	}
-
-	@Override
-	public double getZ(int i) {
-		synchState();
-		return components[i][2];
 	}
 
 	//------------------------

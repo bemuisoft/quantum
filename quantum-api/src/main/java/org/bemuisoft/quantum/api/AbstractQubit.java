@@ -34,30 +34,6 @@ import java.util.Arrays;
  */
 public abstract class AbstractQubit implements IQubit, Base {
 
-	/**
-	 * Returns a capital as short label which is derived
-	 * from the last character of a given long label.
-	 * 
-	 * @param longLabel - the long label
-	 * @return the short label
-	 * @see IQuantumState#isRightToLeft()
-	 * @see QubitFactory#newQubit(String)
-	 */
-	protected static char label(String longLabel) {
-		// return a capital as short label based on last char of longLabel
-		char ch = longLabel.charAt(longLabel.length() - 1);
-		if (ch < 'A') {
-			// assume '0' based
-			return (char) (ch - '0' + 'A');
-		}
-		if (ch < 'a') {
-			// assume 'A' based
-			return ch;
-		}
-		// assume 'a' based
-		return (char) (ch - 'a' + 'A');
-	}
-
 	@Override
 	public IQubit reset() {
 		// measure this qubit and if the state after measurement is |1⟩
