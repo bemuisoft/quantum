@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bemuisoft.quantum</groupId>
+    <artifactId>quantum-pom</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>quantum4j-adapter</artifactId>
+  <version>1.0.0</version>
+  <name>Quantum4J Adapter</name>
+  <description>An adapter to access Quantum4J via the org.bemuisoft.quantum APIs.</description>
+
+  <dependencies>
+	<dependency>
+		<groupId>com.quantum4j</groupId>
+		<artifactId>quantum4j</artifactId>
+		<version>1.3.2</version>
+	</dependency>
+	<dependency>
+		<groupId>org.bemuisoft.quantum</groupId>
+		<artifactId>quantum-api</artifactId>
+		<version>1.2.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.bemuisoft.quantum</groupId>
+		<artifactId>quantum-test-api</artifactId>
+		<version>1.2.0</version>
+		<scope>test</scope>
+	</dependency>
+  </dependencies>
+
+</project>
